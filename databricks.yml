@@ -1,0 +1,56 @@
+bundle:
+  name: f1-data-pipeline
+
+variables:
+  catalog:
+    description: "Ciljni Unity Catalog za smještanje tabela"
+    default: "formula1"
+
+resources:
+  pipelines:
+    f1_medallion_pipeline:
+      name: "[${bundle.environment}] F1 Medallion Pipeline"
+      catalog: ${var.catalog}
+      target: default 
+      libraries:
+        - notebook:
+            path: "./Ingest to Volume.ipynb"
+        - file:
+            path: "./f1 dp files/transformations/01_bronze_ingestion.py"
+        - file:
+            path: "./f1 dp files/transformations/02_silver_circuits.py"
+        - file:
+            path: "./f1 dp files/transformations/03_silver_constructor_results.py"
+        - file:
+            path: "./f1 dp files/transformations/04_constructor_standings.py"
+        - file:
+            path: "./f1 dp files/transformations/05_constructors.py"
+        - file:
+            path: "./f1 dp files/transformations/06_driver_standings.py"
+        - file:
+            path: "./f1 dp files/transformations/07_drivers.py"
+        - file:
+            path: "./f1 dp files/transformations/08_lap_times.py"
+        - file:
+            path: "./f1 dp files/transformations/09_pit_stops.py"
+        - file:
+            path: "./f1 dp files/transformations/10_qualifying.py"
+        - file:
+            path: "./f1 dp files/transformations/11_races.py"
+        - file:
+            path: "./f1 dp files/transformations/12_results.py"
+        - file:
+            path: "./f1 dp files/transformations/13_seasons.py"
+        - file:
+            path: "./f1 dp files/transformations/14_sprint_results.py"
+        - file:
+            path: "./f1 dp files/transformations/15_status.py"
+        - file:
+            path: "./f1 dp files/transformations/16_pit_stop_eficiency.py"
+
+targets:
+  dev:
+    workspace:
+      host: https://adb-7405609414763051.11.azuredatabricks.net
+    variables:
+      catalog: formula1 
